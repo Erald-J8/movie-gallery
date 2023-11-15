@@ -1,19 +1,28 @@
 <div class="container">
-    <div >
-        <mat-form-field appearance="fill">
+    <mat-toolbar>
+      <h2 class="title">Movie Gallery App</h2>
+      <div class="search-wrapper">
+        <mat-form-field>
+            <mat-label>Search for a movie...</mat-label>
             <input
-                type="text"
                 matInput
                 placeholder="Search for a movie title..."
                 [(ngModel)]="searchValue"
-                (ngModelChange)="onMovieSearched($event)"
+                (ngModelChange)="setValue($event)"
             />
-            <mat-icon>search</mat-icon>
-        </mat-form-field>
+            <button *ngIf="searchValue.length" matSuffix mat-icon-button aria-label="Clear" (click)="setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-hint *ngIf="searchValue.length">
+                Here are the results for: <u>{{ searchValue }}</u>
+            </mat-hint>
+          </mat-form-field>
     </div>
+    </mat-toolbar>
+
     <mat-spinner *ngIf="searchValue.length && !moviesToDisplay.length && !errorMessage.length"></mat-spinner>
    
-    <div *ngIf="!isLoading && moviesToDisplay.length">
+    <div *ngIf="!isLoading && moviesToDisplay.length" class="list-container">
         <table mat-table [dataSource]="moviesToDisplay" class="mat-elevation-z8">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> Id </th>

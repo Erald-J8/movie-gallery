@@ -17,7 +17,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   isLoading = false
   searchState$ = new BehaviorSubject('')
 
-  displayedColumns: string[] = ['id', 'title', 'releaseDate', 'genre'];
+  displayedColumns: string[] = ['id', 'title', 'type', 'year'];
 
   private ngUnsubscribe = new Subject<void>();
 

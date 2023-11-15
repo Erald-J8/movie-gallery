@@ -1,0 +1,52 @@
+<div class="container">
+    <div >
+        <mat-form-field appearance="fill">
+            <input
+                type="text"
+                matInput
+                placeholder="Search for a movie title..."
+                [(ngModel)]="searchValue"
+                (ngModelChange)="onMovieSearched($event)"
+            />
+            <mat-icon>search</mat-icon>
+        </mat-form-field>
+    </div>
+    <mat-spinner *ngIf="searchValue.length && !moviesToDisplay.length && !errorMessage.length"></mat-spinner>
+   
+    <div *ngIf="!isLoading && moviesToDisplay.length">
+        <table mat-table [dataSource]="moviesToDisplay" class="mat-elevation-z8">
+            <!-- Weight Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef> Id </th>
+              <td mat-cell *matCellDef="let movie"> {{ movie.imdbID }} </td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef> Title </th>
+              <td mat-cell *matCellDef="let movie"> {{ movie.Title }} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="genre">
+                <th mat-header-cell *matHeaderCellDef> Title </th>
+                <td mat-cell *matCellDef="let movie"> {{ movie.Genre }} </td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+            <ng-container matColumnDef="releaseDate">
+                <th mat-header-cell *matHeaderCellDef> Release Date </th>
+                <td mat-cell *matCellDef="let movie"> {{ movie.Released }} </td>
+              </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openMovieInfo(row)"></tr>
+          </table>
+    </div>
+    <div *ngIf="errorMessage.length" class="not-found">
+        <h3>{{ errorMessage }}</h3>
+        <img
+          src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg?w=1480&t=st=1700078584~exp=1700079184~hmac=36dadc1a9a97c1502619ebe146a9cb4f7b4be3802b760247d211c76c6fc953c2"
+        />
+    </div>
+</div>

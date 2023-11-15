@@ -10,7 +10,6 @@ import { InfoDialogComponent } from '../info-dialog/info-dialog.component'
   styleUrls: ['./gallery.component.sass'],
 })
 export class GalleryComponent implements OnInit, OnDestroy {
-  allMovies: any[] = [];
   moviesToDisplay: any[] = [];
   errorMessage = ''
   searchValue = ''
@@ -24,24 +23,25 @@ export class GalleryComponent implements OnInit, OnDestroy {
   constructor(public searchService: SearchService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-      this.searchService.isLoading.pipe(
+      this.searchService.isLoading$.pipe(
+          takeUntil(this.ngUnsubscribe),
+        ).subscribe(() => {
+            this.errorMessage = ''
+            // when movies are finished loading take only the first 3 which have the highest rating (could use another criteria...)
+            if (this.moviesToDisplay.length > 3) {
+                this.moviesToDisplay = this.moviesToDisplay.slice(0, 3)
+            } else if (!this.moviesToDisplay.length && this.searchValue.length) {
+                this.errorMessage = 'No movies found! Try searching for another title...'
+            }    
+        }
+      )
+
+      this.searchState$.pipe(
           takeUntil(this.ngUnsubscribe),
           debounceTime(1000),
-        ).subscribe((value) => {
-          this.moviesToDisplay = []
-          this.errorMessage = ''
 
-          // when movies are finished loading take only the first 3 which have the highest rating (could use another criteria...)
-          if (this.allMovies.length) {
-              this.moviesToDisplay = this.allMovies.sort((first: any, second: any): number => {
-                  return (Number.parseInt(first.imdbVotes) < Number.parseInt(second.imdbVotes)) as unknown as number
-              })
-              if (this.allMovies.length > 3)
-                this.moviesToDisplay = this.allMovies.slice(0, 3)
-          } else if (this.searchValue.length) {
-              this.errorMessage = 'No movies found! Try searching for another title...'
-          }
-          
+      ).subscribe(() => {
+          this.onMovieSearched(this.searchValue)
       })
   }
 
@@ -55,7 +55,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   onMovieSearched(keyword: string) {
-      this.allMovies = []
       this.moviesToDisplay = []
       this.errorMessage = ''
 
@@ -64,12 +63,17 @@ export class GalleryComponent implements OnInit, OnDestroy {
                 .searchMovies(keyword)
                 .pipe(
                     takeUntil(this.ngUnsubscribe),
-                    finalize(() => this.searchService.isLoading.next(false))
+                    finalize(() => this.searchService.isLoading$.next(false))
                 )
                 .subscribe((movies) => {
-                    this.allMovies = this.allMovies.concat(movies).filter((movie) => movie && movie.Title)
+                    this.moviesToDisplay = this.moviesToDisplay.concat(movies).filter((movie) => movie && movie.Title)
                 })
       }
+  }
+
+  setValue(keyword: string) {
+      this.searchValue = keyword
+      this.searchState$.next(keyword)
   }
 
   ngOnDestroy(): void {

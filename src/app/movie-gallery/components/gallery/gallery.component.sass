@@ -1,4 +1,36 @@
 .container
+    .list-container,
+    .search-wrapper
+        width: 100%
+
+    mat-toolbar
+        display: flex
+        flex-direction: column
+        height: 220px
+
+        & > *
+            margin: 16px 0
+
+    h2.title
+        font-family: 'Playfair Display', serif
+        font-weight: 700
+        font-size: 50px
+
+    .search-wrapper
+        width: 100%
+
+    mat-form-field
+        width: 100%
+
+        input
+            height: 20px
+
+        mat-label, label, input, mat-hint
+            font-family: 'Manrope', sans-serif
+
+        input
+            color: rgba(0, 0, 0, .3)
+
     .not-found
         display: flex
         flex-direction: column
@@ -7,15 +39,6 @@
         img
             max-width: 500px
             background-size: cover
-
-    mat-form-field
-        border-radius: 5px
-        display: flex
-        width: 90vw
-    
-    mat-icon
-        position: absolute
-        right: 10px
 
     td
         cursor: pointer

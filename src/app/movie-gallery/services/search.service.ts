@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment'
     providedIn: 'root',
 })
 export class SearchService {
-    public isLoading = new BehaviorSubject<boolean>(false)
+    public isLoading$ = new BehaviorSubject<boolean>(false)
 
     constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class SearchService {
                 return result.Search
             }),
             catchError((error) => {
-                this.isLoading.next(false)
+                this.isLoading$.next(false)
                 return error.Error
             })
         );

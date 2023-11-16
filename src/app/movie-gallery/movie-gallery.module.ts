@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table'
 import { GalleryComponent } from '../movie-gallery/components/gallery/gallery.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchService } from './services/search.service';
@@ -24,6 +25,7 @@ import { InfoDialogComponent } from './components/info-dialog/info-dialog.compon
   ],
   imports: [
     CommonModule,
+    MatToolbarModule,
     MatProgressSpinnerModule,
     MatTableModule,
     MatCardModule,
